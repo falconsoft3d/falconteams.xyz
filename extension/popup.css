@@ -1,0 +1,45 @@
+:root { color-scheme: light dark; --teal: #0f766e; --teal-dark: #115e59; --rose: #e11d48; --bg: #fff; --fg: #0f172a; --muted: #64748b; --line: #e2e8f0; }
+@media (prefers-color-scheme: dark) { :root { --bg: #0f172a; --fg: #f1f5f9; --muted: #94a3b8; --line: #334155; } }
+* { box-sizing: border-box; }
+body { width: 340px; margin: 0; padding: 14px 16px 16px; font: 14px/1.4 system-ui, -apple-system, Segoe UI, sans-serif; background: var(--bg); color: var(--fg); }
+header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+label { display: block; margin-bottom: 10px; font-size: 12px; color: var(--muted); }
+input, textarea { width: 100%; margin-top: 4px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: transparent; color: var(--fg); font: inherit; }
+input:focus, textarea:focus { outline: 2px solid color-mix(in srgb, var(--teal) 40%, transparent); border-color: var(--teal); }
+button { font: inherit; cursor: pointer; }
+button:disabled { opacity: .6; cursor: progress; }
+.primary { width: 100%; padding: 10px; border: 0; border-radius: 10px; background: var(--teal); color: #fff; font-weight: 600; }
+.primary:hover { background: var(--teal-dark); }
+.primary.out { background: var(--rose); }
+.big { padding: 14px; font-size: 16px; margin-top: 8px; }
+.who { margin: 0 0 8px; color: var(--muted); font-size: 12px; }
+.status { font-weight: 600; }
+.status.on { color: var(--teal); }
+.timer { font-size: 34px; font-weight: 700; font-variant-numeric: tabular-nums; margin: 2px 0; }
+.muted { color: var(--muted); font-size: 12px; margin: 4px 0; }
+.warn { color: #b45309; font-size: 12px; }
+.error { margin: 10px 0 0; padding: 8px 10px; border-radius: 8px; background: #fee2e2; color: #991b1b; font-size: 12px; }
+textarea { margin: 10px 0 0; resize: vertical; }
+footer { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--line); font-size: 12px; }
+footer a { color: var(--teal); text-decoration: none; }
+.link { border: 0; background: none; color: var(--muted); padding: 0; }
+.link:hover { color: var(--fg); }
+.tabs { display: flex; gap: 4px; margin-bottom: 12px; padding: 3px; border-radius: 10px; background: color-mix(in srgb, var(--muted) 15%, transparent); }
+.tab { flex: 1; padding: 6px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); font-weight: 600; }
+.tab.active { background: var(--bg); color: var(--fg); box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+.badge { display: inline-block; min-width: 18px; padding: 0 5px; border-radius: 999px; background: var(--rose); color: #fff; font-size: 11px; line-height: 18px; }
+.contacts { list-style: none; margin: 0; padding: 0; max-height: 360px; overflow-y: auto; }
+.contacts button { display: flex; width: 100%; align-items: center; gap: 10px; padding: 8px; border: 0; border-radius: 8px; background: transparent; color: var(--fg); text-align: left; }
+.contacts button:hover { background: color-mix(in srgb, var(--muted) 12%, transparent); }
+.avatar { display: flex; flex: none; width: 30px; height: 30px; align-items: center; justify-content: center; border-radius: 50%; background: color-mix(in srgb, var(--teal) 18%, transparent); color: var(--teal); font-size: 12px; font-weight: 700; }
+.contacts .name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.conv-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.messages { height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding: 4px 2px; }
+.msg { max-width: 80%; padding: 6px 10px; border-radius: 14px; white-space: pre-wrap; word-break: break-word; font-size: 13px; }
+.msg.mine { align-self: flex-end; background: var(--teal); color: #fff; border-bottom-right-radius: 4px; }
+.msg.theirs { align-self: flex-start; background: color-mix(in srgb, var(--muted) 15%, transparent); border-bottom-left-radius: 4px; }
+.msg.ai { background: color-mix(in srgb, #8b5cf6 15%, transparent); }
+.send { display: flex; gap: 6px; margin-top: 8px; align-items: flex-end; }
+.send textarea { margin: 0; flex: 1; resize: none; }
+.send .primary { width: auto; padding: 8px 12px; }
+.empty { color: var(--muted); font-size: 12px; text-align: center; padding: 12px; }

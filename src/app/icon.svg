@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#0f766e"/>
+  <path d="M32 14a18 18 0 1 0 0 36 18 18 0 0 0 0-36Z" fill="none" stroke="#99f6e4" stroke-width="3" opacity=".45"/>
+  <text x="32" y="41" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" fill="#ffffff" letter-spacing="-1">FT</text>
+</svg>

@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "FalconTeams · Fichar",
+  "short_name": "FalconTeams",
+  "version": "1.1.0",
+  "description": "Ficha y chatea con tu equipo de FalconTeams sin abrir la aplicación. Clock in and chat with your FalconTeams team from your toolbar.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "FalconTeams",
+    "default_icon": { "16": "icons/icon16.png", "32": "icons/icon32.png", "48": "icons/icon48.png", "128": "icons/icon128.png" }
+  },
+  "icons": { "16": "icons/icon16.png", "32": "icons/icon32.png", "48": "icons/icon48.png", "128": "icons/icon128.png" },
+  "permissions": ["storage", "geolocation"]
+}

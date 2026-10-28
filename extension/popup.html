@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <img src="icons/icon32.png" alt="" width="24" height="24">
+    <strong id="title">FalconTeams</strong>
+  </header>
+
+  <!-- Configuración inicial: dirección de la empresa + login -->
+  <section id="setup" hidden>
+    <form id="login-form">
+      <label><span data-t="companyUrl"></span>
+        <input name="url" type="url" required placeholder="https://falconteams.xyz/mi-empresa">
+      </label>
+      <label><span data-t="email"></span>
+        <input name="email" type="email" required autocomplete="email">
+      </label>
+      <label><span data-t="password"></span>
+        <input name="password" type="password" required autocomplete="current-password">
+      </label>
+      <button type="submit" class="primary" data-t="signIn"></button>
+    </form>
+  </section>
+
+  <!-- Pestañas (con sesión iniciada) -->
+  <nav id="tabs" class="tabs" hidden>
+    <button id="tab-clock" class="tab active" data-t="tabClock"></button>
+    <button id="tab-chat" class="tab" data-t="tabChat"><span data-t="tabChat"></span> <span id="chat-badge" class="badge" hidden></span></button>
+  </nav>
+
+  <!-- Chat -->
+  <section id="chat" hidden>
+    <ul id="contacts" class="contacts"></ul>
+    <div id="conversation" hidden>
+      <div class="conv-head"><button id="back" class="link">←</button> <strong id="peer"></strong></div>
+      <div id="messages" class="messages"></div>
+      <form id="send-form" class="send">
+        <textarea id="message" rows="2" required></textarea>
+        <button type="submit" class="primary" data-t="send"></button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Fichaje -->
+  <section id="main" hidden>
+    <p class="who"><span id="user"></span> · <span id="company"></span></p>
+    <div id="status" class="status"></div>
+    <div id="timer" class="timer"></div>
+    <p id="today" class="muted"></p>
+    <p id="autoclose" class="warn" hidden></p>
+    <textarea id="notes" rows="3" hidden></textarea>
+    <button id="clock" class="primary big"></button>
+    <p id="geo" class="muted" hidden></p>
+    <footer>
+      <a id="open" href="#" target="_blank" data-t="openApp"></a>
+      <button id="logout" class="link" data-t="logout"></button>
+    </footer>
+  </section>
+
+  <p id="error" class="error" hidden></p>
+  <script src="popup.js"></script>
+</body>
+</html>

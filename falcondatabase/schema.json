@@ -1,0 +1,982 @@
+{
+  "auth": {
+    "auth_enabled": true,
+    "allow_signup": false
+  },
+  "tables": [
+    {
+      "name": "absences",
+      "access": "private",
+      "description": "Días de ausencia: vacaciones, enfermedad, permisos",
+      "columns": [
+        {
+          "name": "user_id",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "day",
+          "type": "date",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "note",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "name": "avatars",
+      "access": "private",
+      "description": "Foto de perfil de cada usuario",
+      "columns": [
+        {
+          "name": "user_id",
+          "type": "integer",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "image",
+          "type": "text",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "billing_profiles",
+      "access": "private",
+      "description": "Datos de facturación de cada empleado",
+      "columns": [
+        {
+          "name": "user_id",
+          "type": "integer",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "legal_name",
+          "type": "text"
+        },
+        {
+          "name": "tax_id",
+          "type": "text"
+        },
+        {
+          "name": "address",
+          "type": "text"
+        },
+        {
+          "name": "country",
+          "type": "text"
+        },
+        {
+          "name": "service_name",
+          "type": "text"
+        },
+        {
+          "name": "logo",
+          "type": "text"
+        },
+        {
+          "name": "invoice_template",
+          "type": "text",
+          "default": "classic"
+        },
+        {
+          "name": "accent_color",
+          "type": "text",
+          "default": "#0f766e"
+        }
+      ]
+    },
+    {
+      "name": "chat_messages",
+      "access": "private",
+      "description": "Mensajes del chat (entre usuarios y con el agente IA)",
+      "columns": [
+        {
+          "name": "conversation",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "company_id",
+          "type": "integer"
+        },
+        {
+          "name": "sender_id",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "recipient_id",
+          "type": "integer"
+        },
+        {
+          "name": "role",
+          "type": "text",
+          "required": true,
+          "default": "user"
+        },
+        {
+          "name": "content",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "read_at",
+          "type": "datetime"
+        }
+      ]
+    },
+    {
+      "name": "companies",
+      "access": "private",
+      "description": "Empresas",
+      "columns": [
+        {
+          "name": "name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "slug",
+          "type": "text",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "active",
+          "type": "boolean",
+          "default": "true"
+        },
+        {
+          "name": "auto_close",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "auto_close_hours",
+          "type": "integer",
+          "default": "8"
+        }
+      ]
+    },
+    {
+      "name": "company_ai",
+      "access": "private",
+      "description": "Agente IA (OpenAI) de cada empresa",
+      "columns": [
+        {
+          "name": "company_id",
+          "type": "integer",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "api_key_enc",
+          "type": "text"
+        },
+        {
+          "name": "model",
+          "type": "text",
+          "required": true,
+          "default": "gpt-4o-mini"
+        },
+        {
+          "name": "system_prompt",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "name": "company_links",
+      "access": "private",
+      "description": "Enlaces con credenciales para los empleados de una empresa",
+      "columns": [
+        {
+          "name": "company_id",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "url",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "username",
+          "type": "text"
+        },
+        {
+          "name": "password_enc",
+          "type": "text"
+        },
+        {
+          "name": "notes",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "name": "doc_files",
+      "access": "private",
+      "description": "Ficheros de documentación de una empresa",
+      "columns": [
+        {
+          "name": "company_id",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "folder_id",
+          "type": "integer"
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "text"
+        },
+        {
+          "name": "size",
+          "type": "integer"
+        },
+        {
+          "name": "content",
+          "type": "text",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "doc_folders",
+      "access": "private",
+      "description": "Carpetas de documentación de una empresa",
+      "columns": [
+        {
+          "name": "company_id",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "parent_id",
+          "type": "integer"
+        },
+        {
+          "name": "color",
+          "type": "text",
+          "default": "#0f766e"
+        }
+      ]
+    },
+    {
+      "name": "goals",
+      "access": "private",
+      "description": "Objetivos asignados a empleados",
+      "columns": [
+        {
+          "name": "user_id",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "text"
+        },
+        {
+          "name": "due_date",
+          "type": "date"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "required": true,
+          "default": "pending"
+        },
+        {
+          "name": "completed_at",
+          "type": "datetime"
+        },
+        {
+          "name": "evidence_url",
+          "type": "text"
+        },
+        {
+          "name": "evidence_file_name",
+          "type": "text"
+        },
+        {
+          "name": "evidence_file_type",
+          "type": "text"
+        },
+        {
+          "name": "evidence_file",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "name": "job_applications",
+      "access": "private",
+      "description": "Candidaturas: datos, cuestionario, respuestas y evaluación IA",
+      "columns": [
+        {
+          "name": "offer_id",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "company_id",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "token",
+          "type": "text",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "email",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "phone",
+          "type": "text"
+        },
+        {
+          "name": "link",
+          "type": "text"
+        },
+        {
+          "name": "about",
+          "type": "text"
+        },
+        {
+          "name": "questions",
+          "type": "json"
+        },
+        {
+          "name": "answers",
+          "type": "json"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "required": true,
+          "default": "questions"
+        },
+        {
+          "name": "stage",
+          "type": "text",
+          "required": true,
+          "default": "new"
+        },
+        {
+          "name": "score",
+          "type": "integer"
+        },
+        {
+          "name": "evaluation",
+          "type": "json"
+        },
+        {
+          "name": "submitted_at",
+          "type": "datetime"
+        },
+        {
+          "name": "country",
+          "type": "text"
+        },
+        {
+          "name": "city",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "name": "job_offers",
+      "access": "private",
+      "description": "Ofertas de empleo de cada empresa",
+      "columns": [
+        {
+          "name": "company_id",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "location",
+          "type": "text"
+        },
+        {
+          "name": "modality",
+          "type": "text"
+        },
+        {
+          "name": "employment_type",
+          "type": "text"
+        },
+        {
+          "name": "salary",
+          "type": "text"
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "true"
+        },
+        {
+          "name": "image",
+          "type": "text"
+        },
+        {
+          "name": "image_updated_at",
+          "type": "datetime"
+        }
+      ]
+    },
+    {
+      "name": "mail_accounts",
+      "access": "private",
+      "description": "Configuración IMAP/SMTP del buzón de cada usuario (contraseñas cifradas)",
+      "columns": [
+        {
+          "name": "user_id",
+          "type": "integer",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "email_address",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "display_name",
+          "type": "text"
+        },
+        {
+          "name": "imap_host",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "imap_port",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "imap_secure",
+          "type": "boolean",
+          "default": "true"
+        },
+        {
+          "name": "imap_user",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "imap_pass_enc",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "smtp_host",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "smtp_port",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "smtp_secure",
+          "type": "boolean",
+          "default": "true"
+        },
+        {
+          "name": "smtp_user",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "smtp_pass_enc",
+          "type": "text",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "profiles",
+      "access": "private",
+      "description": "Rol y empresa de cada usuario",
+      "columns": [
+        {
+          "name": "user_id",
+          "type": "integer",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "email",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "full_name",
+          "type": "text"
+        },
+        {
+          "name": "role",
+          "type": "text",
+          "required": true,
+          "default": "employee"
+        },
+        {
+          "name": "company_id",
+          "type": "integer"
+        },
+        {
+          "name": "active",
+          "type": "boolean",
+          "default": "true"
+        },
+        {
+          "name": "hourly_rate",
+          "type": "decimal"
+        },
+        {
+          "name": "monthly_salary",
+          "type": "decimal"
+        },
+        {
+          "name": "weekly_hours",
+          "type": "decimal",
+          "default": "40"
+        },
+        {
+          "name": "geo_required",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "avatar_updated_at",
+          "type": "datetime"
+        }
+      ]
+    },
+    {
+      "name": "projects",
+      "access": "private",
+      "description": "Proyectos de una empresa",
+      "columns": [
+        {
+          "name": "company_id",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "text"
+        },
+        {
+          "name": "active",
+          "type": "boolean",
+          "default": "true"
+        }
+      ]
+    },
+    {
+      "name": "recruit_questions",
+      "access": "private",
+      "description": "Preguntas propias de cada empresa para sus candidatos",
+      "columns": [
+        {
+          "name": "company_id",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "question",
+          "type": "text",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "tasks",
+      "access": "private",
+      "description": "Tareas de un proyecto",
+      "columns": [
+        {
+          "name": "company_id",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "project_id",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "done",
+          "type": "boolean",
+          "default": "false"
+        }
+      ]
+    },
+    {
+      "name": "time_allocations",
+      "access": "private",
+      "description": "Reparto de las horas de un fichaje entre proyectos y tareas",
+      "columns": [
+        {
+          "name": "entry_id",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "user_id",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "company_id",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "project_id",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "task_id",
+          "type": "integer"
+        },
+        {
+          "name": "minutes",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "day",
+          "type": "date",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "time_entries",
+      "access": "private",
+      "description": "Fichajes de entrada y salida",
+      "columns": [
+        {
+          "name": "user_id",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "company_id",
+          "type": "integer"
+        },
+        {
+          "name": "clock_in",
+          "type": "datetime",
+          "required": true,
+          "default": "now()"
+        },
+        {
+          "name": "clock_out",
+          "type": "datetime"
+        },
+        {
+          "name": "auto_closed",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "notes",
+          "type": "text"
+        },
+        {
+          "name": "edited",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "in_lat",
+          "type": "float"
+        },
+        {
+          "name": "in_lng",
+          "type": "float"
+        },
+        {
+          "name": "in_accuracy",
+          "type": "float"
+        },
+        {
+          "name": "out_lat",
+          "type": "float"
+        },
+        {
+          "name": "out_lng",
+          "type": "float"
+        },
+        {
+          "name": "out_accuracy",
+          "type": "float"
+        }
+      ]
+    },
+    {
+      "name": "internal_mails",
+      "access": "private",
+      "description": "Correo interno: contenido de cada mensaje",
+      "columns": [
+        {
+          "name": "company_id",
+          "type": "integer"
+        },
+        {
+          "name": "sender_id",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "subject",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "body",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "to_names",
+          "type": "text"
+        },
+        {
+          "name": "reply_to_id",
+          "type": "integer"
+        }
+      ]
+    },
+    {
+      "name": "internal_mailboxes",
+      "access": "private",
+      "description": "Correo interno: buzón de cada usuario (entrada/enviados) y lectura",
+      "columns": [
+        {
+          "name": "mail_id",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "user_id",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "folder",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "read_at",
+          "type": "datetime"
+        }
+      ]
+    },
+    {
+      "name": "contact_messages",
+      "access": "private",
+      "description": "Mensajes del formulario de contacto público",
+      "columns": [
+        {
+          "name": "name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "email",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "company",
+          "type": "text"
+        },
+        {
+          "name": "message",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "read",
+          "type": "boolean",
+          "default": "false"
+        }
+      ]
+    },
+    {
+      "name": "invoice_items",
+      "access": "private",
+      "description": "Conceptos extra de la factura mensual de un empleado",
+      "columns": [
+        {
+          "name": "user_id",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "month",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "quantity",
+          "type": "decimal",
+          "required": true,
+          "default": "1"
+        },
+        {
+          "name": "unit_price",
+          "type": "decimal",
+          "required": true
+        },
+        {
+          "name": "added_by",
+          "type": "integer"
+        }
+      ]
+    },
+    {
+      "name": "equipment",
+      "access": "private",
+      "description": "Equipos y herramientas de la empresa asignados a empleados",
+      "columns": [
+        {
+          "name": "user_id",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "company_id",
+          "type": "integer"
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "serial_number",
+          "type": "text"
+        },
+        {
+          "name": "assigned_at",
+          "type": "date",
+          "required": true
+        },
+        {
+          "name": "cost",
+          "type": "decimal"
+        },
+        {
+          "name": "notes",
+          "type": "text"
+        },
+        {
+          "name": "returned_at",
+          "type": "date"
+        },
+        {
+          "name": "assigned_by",
+          "type": "integer"
+        }
+      ]
+    },
+    {
+      "name": "equipment_images",
+      "access": "private",
+      "description": "Fotos de cada equipo asignado",
+      "columns": [
+        {
+          "name": "equipment_id",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "image",
+          "type": "text",
+          "required": true
+        }
+      ]
+    }
+  ]
+}
