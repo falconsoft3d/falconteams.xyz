@@ -64,6 +64,11 @@ npm run dev                      # http://localhost:3000
 | `NEXT_PUBLIC_CURRENCY` | Moneda de costes y facturas (por defecto `EUR`) |
 | `OPENAI_BASE_URL` | Opcional: API compatible con OpenAI para el agente IA y el reclutamiento |
 
+Antes de servir el sitio se validan estas variables (`src/proxy.ts`): si falta alguna obligatoria o tiene un formato
+no válido, todas las páginas muestran una página de configuración (HTTP 503) con los nombres de lo que falta —nunca sus
+valores— y el arranque del servidor lo avisa en el log. Los errores de render se registran con su ruta y su `digest`
+(`src/instrumentation.ts`), que es el código que muestra el navegador en producción (por ejemplo, el error #441 de React).
+
 Tras cambiar `extension/`, regenera el zip descargable con `npm run build:extension`.
 
 ## Modelo de datos (falcondatabase)
