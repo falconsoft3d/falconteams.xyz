@@ -1317,6 +1317,21 @@ export async function setEmployeeActive(_: FormState, fd: FormData): Promise<For
   });
 }
 
+export async function deleteEmployee(_: FormState, fd: FormData): Promise<FormState> {
+  await requireAdmin();
+  try {
+    const profile = await employeeProfile(fd);
+    if (field(fd, "confirm").toLowerCase() !== profile.email.toLowerCase()) {
+      throw new Error(`Escribe «${profile.email}» para confirmar.`);
+    }
+    await data.deleteEmployee(profile);
+  } catch (err) {
+    return failed(err);
+  }
+  // Su ficha ya no existe: se vuelve al listado.
+  redirect("/admin/employees");
+}
+
 export async function resetPassword(_: FormState, fd: FormData): Promise<FormState> {
   return asAdmin(async () => {
     const profile = await employeeProfile(fd);

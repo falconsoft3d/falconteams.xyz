@@ -1,6 +1,6 @@
 import { ActionForm } from "./action-form";
-import { btnSecondary, btnSmall, input } from "./ui";
-import { assignCompany, resetPassword, setEmployeeActive, setGeoRequired } from "@/lib/actions";
+import { btnDanger, btnSecondary, btnSmall, input } from "./ui";
+import { assignCompany, deleteEmployee, resetPassword, setEmployeeActive, setGeoRequired } from "@/lib/actions";
 import type { Company, Profile } from "@/lib/data";
 
 export function CompanySelect({ companies, name = "company_id", defaultValue, className }: {
@@ -61,5 +61,29 @@ export function ResetPasswordForm({ profile }: { profile: Profile }) {
       <input name="password" type="password" minLength={8} required placeholder="Nueva contraseña" autoComplete="new-password" className={`${input} w-auto! min-w-40 py-1.5!`} />
       <button className={`${btnSecondary} ${btnSmall}`}>Cambiar contraseña</button>
     </ActionForm>
+  );
+}
+
+export function DeleteEmployeeForm({ profile }: { profile: Profile }) {
+  return (
+    <details className="rounded-2xl border border-red-100 bg-white p-5">
+      <summary className="cursor-pointer font-semibold text-red-700">Eliminar empleado</summary>
+      <p className="mt-2 text-sm text-slate-600">
+        Se borran para siempre su cuenta, fichajes, ausencias, objetivos, facturas, equipos y chat.
+        Si solo quieres quitarle el acceso y conservar su historial, desactívalo.
+      </p>
+      <ActionForm action={deleteEmployee} className="mt-3 flex flex-wrap gap-2">
+        <input type="hidden" name="profile_id" value={profile.id} />
+        <input
+          name="confirm"
+          required
+          autoComplete="off"
+          placeholder={profile.email}
+          aria-label={`Escribe ${profile.email} para confirmar`}
+          className={`${input} w-auto! min-w-64 py-1.5!`}
+        />
+        <button className={`${btnDanger} ${btnSmall}`}>Eliminar definitivamente</button>
+      </ActionForm>
+    </details>
   );
 }

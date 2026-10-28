@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { AdminGoals } from "@/components/admin-goals";
 import { EquipmentList } from "@/components/equipment-list";
 import { CostForm } from "@/components/cost-form";
-import { AssignCompanyForm, GeoRequiredForm, ResetPasswordForm, ToggleActiveForm } from "@/components/employee-controls";
+import { AssignCompanyForm, DeleteEmployeeForm, GeoRequiredForm, ResetPasswordForm, ToggleActiveForm } from "@/components/employee-controls";
 import { ExportLink } from "@/components/export-link";
 import { HoursPanel } from "@/components/hours-panel";
 import { LiveTimer } from "@/components/live-timer";
@@ -105,6 +105,8 @@ async function Employee({ params, searchParams }: PageProps<"/admin/employees/[i
           </>
         }
       />
+
+      <DeleteEmployeeForm profile={profile} />
     </div>
   );
 }

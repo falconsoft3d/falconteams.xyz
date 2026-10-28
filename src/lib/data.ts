@@ -218,6 +218,40 @@ export function updateProfile(
   return db.update("profiles", id, values);
 }
 
+/** Tablas con datos propios de cada usuario (columna user_id = id de la cuenta). */
+const USER_TABLES = [
+  "time_allocations",
+  "time_entries",
+  "absences",
+  "avatars",
+  "goals",
+  "billing_profiles",
+  "invoice_items",
+  "mail_accounts",
+  "internal_mailboxes",
+  "equipment",
+];
+
+/**
+ * Elimina al empleado, su cuenta y todos sus datos. Los correos internos que
+ * envió se conservan en los buzones de los destinatarios (remitente «—»).
+ */
+export async function deleteEmployee(profile: Profile) {
+  // Primero se le corta el acceso, por si el borrado se queda a medias.
+  await db.updateAuthUser(profile.user_id, { is_active: false }).catch(() => {});
+  const equipment = await db.queryAll<{ id: number }>("equipment", { filters: { user_id: profile.user_id }, select: ["id"] });
+  await removeWhereIn("equipment_images", "equipment_id", equipment.map((e) => e.id));
+  for (const table of USER_TABLES) await removeWhere(table, { user_id: profile.user_id });
+  await removeWhere("chat_messages", { sender_id: profile.user_id });
+  await removeWhere("chat_messages", { recipient_id: profile.user_id });
+  await db.deleteAuthUser(profile.user_id).catch((err) => {
+    // Ya borrada en un intento anterior.
+    if (!(err instanceof db.FdbError && err.status === 404)) throw err;
+  });
+  // El perfil va al final: si algo falla, sigue listado y se puede reintentar.
+  await db.remove("profiles", [profile.id]);
+}
+
 export async function setEmployeeActive(profile: Profile, active: boolean) {
   await db.updateAuthUser(profile.user_id, { is_active: active });
   await updateProfile(profile.id, { active });
