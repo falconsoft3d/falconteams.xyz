@@ -3,7 +3,7 @@ import { cache } from "react";
 import { cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import { getAuthUser } from "./fdb";
-import { getCompanyById, getCompanyBySlug, getProfileByUserId, type Company, type Role } from "./data";
+import { generatesInvoice, getCompanyById, getCompanyBySlug, getProfileByUserId, type Company, type Role } from "./data";
 
 // La cookie guarda el token de sesión de falcondatabase (httpOnly: el navegador
 // no puede leerlo). El rol y la empresa se leen siempre de la tabla privada
@@ -20,6 +20,8 @@ export type CurrentUser = {
   company: Company | null;
   /** El admin ha pedido registrar su ubicación al fichar. */
   geoRequired: boolean;
+  /** Genera factura con sus horas (si no, se ocultan factura y datos de facturación). */
+  invoiced: boolean;
   /** URL de la foto de perfil (cambia al subir otra), o null. */
   avatarUrl: string | null;
 };
@@ -61,6 +63,7 @@ export const userForToken = cache(async (token: string): Promise<CurrentUser | n
     role: profile.role,
     company,
     geoRequired: profile.geo_required,
+    invoiced: generatesInvoice(profile),
     avatarUrl: avatarUrl(profile),
   };
 });

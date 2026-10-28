@@ -33,6 +33,8 @@ export type Profile = {
   weekly_hours: number | null;
   /** Pedir la ubicación del navegador al fichar. */
   geo_required: boolean;
+  /** Genera factura mensual con sus horas (false: no se le factura). */
+  invoiced: boolean;
   /** Fecha de la última foto de perfil (null si no tiene). */
   avatar_updated_at: string | null;
 };
@@ -206,12 +208,17 @@ export async function createEmployee(input: {
   }
 }
 
+/** Si el empleado genera factura. Los perfiles anteriores a la columna (sin valor) sí la generan. */
+export function generatesInvoice(profile: Pick<Profile, "invoiced">) {
+  return profile.invoiced !== false;
+}
+
 export function updateProfile(
   id: number,
   values: Partial<
     Pick<
       Profile,
-      "full_name" | "company_id" | "active" | "hourly_rate" | "monthly_salary" | "weekly_hours" | "geo_required" | "avatar_updated_at"
+      "full_name" | "company_id" | "active" | "hourly_rate" | "monthly_salary" | "weekly_hours" | "geo_required" | "invoiced" | "avatar_updated_at"
     >
   >,
 ) {

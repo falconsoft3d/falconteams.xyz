@@ -607,6 +607,11 @@
           "default": "false"
         },
         {
+          "name": "invoiced",
+          "type": "boolean",
+          "default": "true"
+        },
+        {
           "name": "avatar_updated_at",
           "type": "datetime"
         }

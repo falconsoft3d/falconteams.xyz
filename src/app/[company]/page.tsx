@@ -96,14 +96,16 @@ async function EmployeeDashboard({ user, company, month, now }: {
           companyId={company.id}
         />
       )}
-      <InvoiceCard
-        profileId={user.profileId}
-        userId={user.userId}
-        slug={company.slug}
-        month={month}
-        entries={entries}
-        now={now}
-      />
+      {user.invoiced && (
+        <InvoiceCard
+          profileId={user.profileId}
+          userId={user.userId}
+          slug={company.slug}
+          month={month}
+          entries={entries}
+          now={now}
+        />
+      )}
       <HoursPanel
         entries={entries}
         month={month}

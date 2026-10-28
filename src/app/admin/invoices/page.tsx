@@ -4,6 +4,7 @@ import { Loading } from "@/components/loading";
 import { Stat } from "@/components/stat";
 import { card, pageTitle } from "@/components/ui";
 import {
+  generatesInvoice,
   listBillingProfilesWithoutLogo,
   listCompanies,
   listEmployees,
@@ -48,7 +49,8 @@ async function Invoices({ searchParams }: PageProps<"/admin/invoices">) {
   const companyById = new Map(companies.map((c) => [c.id, c]));
   const billingByUser = new Map(billings.map((b) => [b.user_id, { ...b, logo: withLogo.has(b.user_id) ? "sí" : null }]));
 
-  const rows = employees.map((p) => ({
+  const skipped = employees.filter((p) => !generatesInvoice(p));
+  const rows = employees.filter(generatesInvoice).map((p) => ({
     profile: p,
     invoice: invoiceTotals(p, entries, month, now, items),
     missing: missingBillingFields(billingByUser.get(p.user_id) ?? null),
@@ -120,6 +122,19 @@ async function Invoices({ searchParams }: PageProps<"/admin/invoices">) {
           </table>
         )}
       </section>
+
+      {skipped.length > 0 && (
+        <p className="text-sm text-slate-500">
+          No generan factura:{" "}
+          {skipped.map((p, i) => (
+            <span key={p.id}>
+              {i > 0 && ", "}
+              <Link href={`/admin/employees/${p.id}`} className="hover:text-teal-700">{p.full_name || p.email}</Link>
+            </span>
+          ))}
+          .
+        </p>
+      )}
     </>
   );
 }

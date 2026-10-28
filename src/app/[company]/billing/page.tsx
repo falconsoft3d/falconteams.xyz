@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { ActionForm } from "@/components/action-form";
 import { EmployeeShell } from "@/components/employee-shell";
 import { ImageInput } from "@/components/file-inputs";
@@ -21,6 +22,7 @@ export default function BillingPage(props: PageProps<"/[company]/billing">) {
 async function Billing({ params, searchParams }: PageProps<"/[company]/billing">) {
   const [{ company: slug }, query] = await Promise.all([params, searchParams]);
   const { user, company } = await requireCompanyEmployee(slug);
+  if (!user.invoiced) redirect(`/${slug}`);
   const billing = await getBillingProfile(user.userId);
   const missing = missingBillingFields(billing);
   const invoiceMonth = typeof query.invoice === "string" && /^\d{4}-\d{2}$/.test(query.invoice) ? query.invoice : "";

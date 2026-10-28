@@ -24,6 +24,7 @@ export default function InvoicePage(props: PageProps<"/[company]/invoice">) {
 async function Invoice({ params, searchParams }: PageProps<"/[company]/invoice">) {
   const [{ company: slug }, query] = await Promise.all([params, searchParams]);
   const { user, company } = await requireCompanyEmployee(slug);
+  if (!user.invoiced) redirect(`/${slug}`);
   const now = await requestNow();
   const month = parseMonth(typeof query.month === "string" ? query.month : undefined, now);
 

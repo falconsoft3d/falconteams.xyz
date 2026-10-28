@@ -4,7 +4,7 @@ import type { Company } from "@/lib/data";
 import type { CurrentUser } from "@/lib/session";
 
 /** Menú dentro de una empresa: el del empleado, o el del admin que la visita. */
-export function companyLinks(slug: string, isAdmin: boolean): FrameLink[] {
+export function companyLinks(slug: string, isAdmin: boolean, invoiced = true): FrameLink[] {
   const shared: FrameLink[] = [
     { href: `/${slug}/chat`, label: "nav.chat" },
     { href: `/${slug}/projects`, label: "nav.projects" },
@@ -26,7 +26,7 @@ export function companyLinks(slug: string, isAdmin: boolean): FrameLink[] {
     { href: `/${slug}/inbox`, label: "nav.mail" },
     ...shared,
     { href: `/${slug}/equipment`, label: "nav.equipment" },
-    { href: `/${slug}/billing`, label: "nav.billing" },
+    ...(invoiced ? [{ href: `/${slug}/billing`, label: "nav.billing" } as FrameLink] : []),
     { href: `/${slug}/profile`, label: "nav.profile" },
   ];
 }
@@ -36,7 +36,7 @@ export function EmployeeShell({ user, company, children }: { user: CurrentUser; 
   return (
     <AppFrame
       title={company.name}
-      links={companyLinks(company.slug, user.role === "admin")}
+      links={companyLinks(company.slug, user.role === "admin", user.invoiced)}
       topbar={<UserBar user={user} companySlug={company.slug} />}
       chatCompany={company.slug}
     >

@@ -6,7 +6,7 @@ import { Loading } from "@/components/loading";
 import { PrintButton } from "@/components/print-button";
 import { card } from "@/components/ui";
 import { InvoiceItemsEditor } from "@/components/invoice-items-editor";
-import { getBillingProfile, getCompanyById, getProfileById, listInvoiceItems, listMonthEntries, missingBillingFields } from "@/lib/data";
+import { generatesInvoice, getBillingProfile, getCompanyById, getProfileById, listInvoiceItems, listMonthEntries, missingBillingFields } from "@/lib/data";
 import { invoiceTotals } from "@/lib/invoice";
 import { requestNow } from "@/lib/now";
 import { requireAdmin } from "@/lib/session";
@@ -42,6 +42,20 @@ async function AdminInvoice({ params, searchParams }: PageProps<"/admin/invoices
       ← Facturas
     </Link>
   );
+
+  if (!generatesInvoice(profile)) {
+    return (
+      <div className="space-y-4">
+        {back}
+        <section className={`${card} max-w-xl`}>
+          <h1 className="text-lg font-semibold text-slate-900">{name} no genera factura</h1>
+          <p className="mt-2 text-slate-600">
+            Puedes activarlo en <Link href={`/admin/employees/${profile.id}`} className="text-teal-700 hover:underline">su ficha</Link>.
+          </p>
+        </section>
+      </div>
+    );
+  }
 
   if (!billing || missing.length > 0 || invoice.rate === null || invoice.amount === null) {
     return (

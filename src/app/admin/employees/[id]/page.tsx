@@ -4,13 +4,13 @@ import { notFound } from "next/navigation";
 import { AdminGoals } from "@/components/admin-goals";
 import { EquipmentList } from "@/components/equipment-list";
 import { CostForm } from "@/components/cost-form";
-import { AssignCompanyForm, DeleteEmployeeForm, GeoRequiredForm, ResetPasswordForm, ToggleActiveForm } from "@/components/employee-controls";
+import { AssignCompanyForm, DeleteEmployeeForm, GeoRequiredForm, InvoicedForm, ResetPasswordForm, ToggleActiveForm } from "@/components/employee-controls";
 import { ExportLink } from "@/components/export-link";
 import { HoursPanel } from "@/components/hours-panel";
 import { LiveTimer } from "@/components/live-timer";
 import { Loading } from "@/components/loading";
 import { btnSecondary, btnSmall, card, pageTitle } from "@/components/ui";
-import { equipmentImageIds, getOpenEntry, getProfileById, listCompanies, listEquipment, listMonthAbsences, listMonthEntries } from "@/lib/data";
+import { equipmentImageIds, generatesInvoice, getOpenEntry, getProfileById, listCompanies, listEquipment, listMonthAbsences, listMonthEntries } from "@/lib/data";
 import { requireAdmin } from "@/lib/session";
 import { requestNow } from "@/lib/now";
 import { dayKey, formatTime, monthParam, parseMonth } from "@/lib/time";
@@ -76,6 +76,10 @@ async function Employee({ params, searchParams }: PageProps<"/admin/employees/[i
           <GeoRequiredForm profile={profile} />
         </div>
         <div>
+          <p className="mb-1 text-xs font-medium uppercase tracking-wide text-slate-500">Genera factura</p>
+          <InvoicedForm profile={profile} />
+        </div>
+        <div>
           <p className="mb-1 text-xs font-medium uppercase tracking-wide text-slate-500">Contraseña</p>
           <ResetPasswordForm profile={profile} />
         </div>
@@ -99,9 +103,11 @@ async function Employee({ params, searchParams }: PageProps<"/admin/employees/[i
         actions={
           <>
             <ExportLink month={month} employee={profile.id} />
-            <Link href={`/admin/invoices/${profile.id}?month=${monthParam(month)}`} className={`${btnSecondary} ${btnSmall}`}>
-              🧾 Ver factura
-            </Link>
+            {generatesInvoice(profile) && (
+              <Link href={`/admin/invoices/${profile.id}?month=${monthParam(month)}`} className={`${btnSecondary} ${btnSmall}`}>
+                🧾 Ver factura
+              </Link>
+            )}
           </>
         }
       />

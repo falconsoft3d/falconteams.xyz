@@ -1,7 +1,7 @@
 import { ActionForm } from "./action-form";
 import { btnDanger, btnSecondary, btnSmall, input } from "./ui";
-import { assignCompany, deleteEmployee, resetPassword, setEmployeeActive, setGeoRequired } from "@/lib/actions";
-import type { Company, Profile } from "@/lib/data";
+import { assignCompany, deleteEmployee, resetPassword, setEmployeeActive, setGeoRequired, setInvoiced } from "@/lib/actions";
+import { generatesInvoice, type Company, type Profile } from "@/lib/data";
 
 export function CompanySelect({ companies, name = "company_id", defaultValue, className }: {
   companies: Company[];
@@ -40,6 +40,20 @@ export function GeoRequiredForm({ profile }: { profile: Profile }) {
         {profile.geo_required ? "📍 Activada" : "Desactivada"}
       </span>
       <button className={`${btnSecondary} ${btnSmall}`}>{profile.geo_required ? "Desactivar" : "Activar"}</button>
+    </ActionForm>
+  );
+}
+
+export function InvoicedForm({ profile }: { profile: Profile }) {
+  const invoiced = generatesInvoice(profile);
+  return (
+    <ActionForm action={setInvoiced} showOk={false} className="flex flex-wrap items-center gap-2">
+      <input type="hidden" name="profile_id" value={profile.id} />
+      <input type="hidden" name="invoiced" value={String(!invoiced)} />
+      <span className={`text-sm ${invoiced ? "font-medium text-teal-700" : "text-slate-500"}`}>
+        {invoiced ? "🧾 Sí" : "No genera"}
+      </span>
+      <button className={`${btnSecondary} ${btnSmall}`}>{invoiced ? "Desactivar" : "Activar"}</button>
     </ActionForm>
   );
 }

@@ -1317,6 +1317,13 @@ export async function setEmployeeActive(_: FormState, fd: FormData): Promise<For
   });
 }
 
+export async function setInvoiced(_: FormState, fd: FormData): Promise<FormState> {
+  return asAdmin(async () => {
+    const profile = await employeeProfile(fd);
+    await data.updateProfile(profile.id, { invoiced: field(fd, "invoiced") === "true" });
+  });
+}
+
 export async function deleteEmployee(_: FormState, fd: FormData): Promise<FormState> {
   await requireAdmin();
   try {
