@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-export type BlogCard = { slug: string; title: string; description: string; date: string; minutes: number; tags: string[]; text: string };
+export type BlogCard = { slug: string; category: string; title: string; description: string; date: string; minutes: number; tags: string[]; text: string };
 
 /** Sin tildes ni mayúsculas, para buscar «registro» y encontrar «Registró». */
 const normalize = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
@@ -12,24 +12,23 @@ const normalize = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLo
 const date = (iso: string) => new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(iso));
 
 /** Listado del blog con buscador y filtro por categoría (en el navegador, sin recargar). */
-export function BlogBrowser({ posts }: { posts: BlogCard[] }) {
+export function BlogBrowser({ posts, categories: order }: { posts: BlogCard[]; categories: readonly string[] }) {
   const params = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
   const [query, setQuery] = useState(params.get("q") ?? "");
   const [category, setCategory] = useState(params.get("cat") ?? "");
 
-  const categories = useMemo(() => {
-    const counts = new Map<string, number>();
-    for (const p of posts) for (const t of p.tags) counts.set(t, (counts.get(t) ?? 0) + 1);
-    return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
-  }, [posts]);
+  const categories = useMemo(
+    () => order.map((name) => [name, posts.filter((p) => p.category === name).length] as const).filter(([, n]) => n > 0),
+    [order, posts],
+  );
 
   const results = useMemo(() => {
     const words = normalize(query).split(/\s+/).filter(Boolean);
     return posts.filter((p) => {
-      if (category && !p.tags.includes(category)) return false;
-      const haystack = normalize(`${p.title} ${p.description} ${p.tags.join(" ")} ${p.text}`);
+      if (category && p.category !== category) return false;
+      const haystack = normalize(`${p.title} ${p.description} ${p.category} ${p.tags.join(" ")} ${p.text}`);
       return words.every((w) => haystack.includes(w));
     });
   }, [posts, query, category]);
@@ -93,11 +92,12 @@ export function BlogBrowser({ posts }: { posts: BlogCard[] }) {
         <div className="mt-4 grid gap-5 md:grid-cols-2">
           {results.map((post) => (
             <article key={post.slug} className="group flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-teal-300 hover:shadow-md">
-              <div className="flex flex-wrap gap-1.5">
-                {post.tags.map((tag) => (
-                  <button key={tag} type="button" onClick={() => { setCategory(tag); sync({ cat: tag }); }} className="rounded-full bg-teal-50 px-2.5 py-0.5 text-xs font-medium text-teal-700 hover:bg-teal-100">
-                    {tag}
-                  </button>
+              <div className="flex flex-wrap items-center gap-1.5">
+                <button type="button" onClick={() => { setCategory(post.category); sync({ cat: post.category }); }} className="rounded-full bg-teal-50 px-2.5 py-0.5 text-xs font-semibold text-teal-700 hover:bg-teal-100">
+                  {post.category}
+                </button>
+                {post.tags.filter((t) => t !== post.category).map((tag) => (
+                  <span key={tag} className="text-xs text-slate-400">#{tag.toLowerCase()}</span>
                 ))}
               </div>
               <h2 className="mt-3 text-xl font-semibold text-slate-900 group-hover:text-teal-700">

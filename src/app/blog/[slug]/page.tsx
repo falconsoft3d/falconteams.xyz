@@ -59,8 +59,9 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
         <Link href="/blog" className="text-sm text-slate-500 hover:text-teal-700">← Todos los artículos</Link>
         <article className="mt-6">
           <div className="flex flex-wrap gap-1.5">
-            {post.tags.map((tag) => (
-              <Link key={tag} href={`/blog?cat=${encodeURIComponent(tag)}`} className="rounded-full bg-teal-50 px-2.5 py-0.5 text-xs font-medium text-teal-700 hover:bg-teal-100">{tag}</Link>
+            <Link href={`/blog?cat=${encodeURIComponent(post.category)}`} className="rounded-full bg-teal-50 px-2.5 py-0.5 text-xs font-semibold text-teal-700 hover:bg-teal-100">{post.category}</Link>
+            {post.tags.filter((t) => t !== post.category).map((tag) => (
+              <Link key={tag} href={`/blog?q=${encodeURIComponent(tag)}`} className="text-xs text-slate-400 hover:text-teal-700">#{tag.toLowerCase()}</Link>
             ))}
           </div>
           <h1 className="mt-3 text-4xl font-bold tracking-tight text-slate-900">{post.title}</h1>

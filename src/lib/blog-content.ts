@@ -3,8 +3,12 @@
 
 export type BlogBlock = { h2: string } | { p: string } | { list: string[] } | { quote: string };
 
+export const CATEGORIES = ["Control horario", "Normativa", "Gestión", "Facturación", "Reclutamiento"] as const;
+export type Category = (typeof CATEGORIES)[number];
+
 export type BlogPost = {
   slug: string;
+  category: Category;
   title: string;
   description: string;
   date: string;
@@ -16,6 +20,7 @@ export type BlogPost = {
 export const POSTS: BlogPost[] = [
   {
     slug: "control-horario-eficiencia-equipos",
+    category: "Control horario",
     title: "Cómo el control horario ayuda a la eficiencia de tu equipo",
     description: "Registrar la jornada no es solo una obligación: bien usado, te muestra dónde se va el tiempo y cómo trabajar mejor sin trabajar más horas.",
     date: "2026-10-01",
@@ -48,6 +53,7 @@ export const POSTS: BlogPost[] = [
   },
   {
     slug: "software-control-horario-como-elegir",
+    category: "Control horario",
     title: "Software de control horario: qué debe tener y cómo elegir el mejor",
     description: "Guía para elegir un software de control horario: funciones imprescindibles, preguntas que hacer antes de contratar y errores frecuentes.",
     date: "2026-10-03",
@@ -89,6 +95,7 @@ export const POSTS: BlogPost[] = [
   },
   {
     slug: "registro-jornada-obligatorio-espana",
+    category: "Normativa",
     title: "Registro de jornada obligatorio en España: lo que tu empresa debe saber",
     description: "Desde 2019 todas las empresas en España deben registrar la jornada diaria de su plantilla. Qué exige la norma, cuánto tiempo guardar los registros y cómo cumplir sin complicarte.",
     date: "2026-10-06",
@@ -118,6 +125,7 @@ export const POSTS: BlogPost[] = [
   },
   {
     slug: "control-horario-teletrabajo-hibrido",
+    category: "Control horario",
     title: "Control horario en teletrabajo y trabajo híbrido: guía práctica",
     description: "Cómo registrar la jornada cuando el equipo trabaja desde casa o en modo híbrido, sin perder flexibilidad ni confianza.",
     date: "2026-10-08",
@@ -146,6 +154,7 @@ export const POSTS: BlogPost[] = [
   },
   {
     slug: "geolocalizacion-fichaje-privacidad",
+    category: "Normativa",
     title: "Geolocalización al fichar: cuándo usarla y cómo respetar la privacidad",
     description: "Registrar la ubicación al fichar puede ser útil para equipos de campo, pero exige proporcionalidad e información clara a la plantilla.",
     date: "2026-10-10",
@@ -172,6 +181,7 @@ export const POSTS: BlogPost[] = [
   },
   {
     slug: "calcular-coste-hora-empleado",
+    category: "Gestión",
     title: "Cómo calcular el coste real por hora de un empleado",
     description: "Del salario bruto al coste por hora: qué incluir en el cálculo y cómo usarlo para presupuestar proyectos y medir la rentabilidad.",
     date: "2026-10-13",
@@ -195,6 +205,7 @@ export const POSTS: BlogPost[] = [
   },
   {
     slug: "facturacion-por-horas-freelance",
+    category: "Facturación",
     title: "Facturación por horas para freelancers y consultores: guía práctica",
     description: "Cómo registrar tus horas, emitir facturas claras cada mes y evitar discusiones con el cliente sobre el tiempo dedicado.",
     date: "2026-10-15",
@@ -219,6 +230,7 @@ export const POSTS: BlogPost[] = [
   },
   {
     slug: "gestion-vacaciones-ausencias",
+    category: "Gestión",
     title: "Gestión de vacaciones y ausencias sin hojas de cálculo",
     description: "Vacaciones, bajas y permisos en un calendario compartido: menos errores, menos correos y una visión clara de la disponibilidad del equipo.",
     date: "2026-10-17",
@@ -245,6 +257,7 @@ export const POSTS: BlogPost[] = [
   },
   {
     slug: "imputacion-horas-proyectos-rentabilidad",
+    category: "Gestión",
     title: "Imputación de horas a proyectos: descubre qué proyectos son rentables",
     description: "Repartir las horas de la jornada entre proyectos y tareas es la forma más fiable de conocer el coste real de cada proyecto.",
     date: "2026-10-20",
@@ -271,6 +284,7 @@ export const POSTS: BlogPost[] = [
   },
   {
     slug: "reclutamiento-con-ia-evaluar-candidatos",
+    category: "Reclutamiento",
     title: "Reclutamiento con IA: cómo evaluar candidatos de forma rápida y justa",
     description: "La IA puede generar preguntas y ordenar candidaturas, pero la decisión final debe ser humana. Buenas prácticas para usarla bien.",
     date: "2026-10-24",

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { BlogBrowser, type BlogCard } from "@/components/blog-browser";
 import { PublicHeaderAsync } from "@/components/public-header-async";
-import { POSTS } from "@/lib/blog-content";
+import { CATEGORIES, POSTS } from "@/lib/blog-content";
 
 export const metadata: Metadata = {
   title: "Blog · FalconTeams",
@@ -14,6 +14,7 @@ export const metadata: Metadata = {
 // Texto plano de cada artículo, para el buscador.
 const cards: BlogCard[] = POSTS.map((p) => ({
   slug: p.slug,
+  category: p.category,
   title: p.title,
   description: p.description,
   date: p.date,
@@ -44,7 +45,7 @@ export default function BlogPage() {
         <p className="mt-2 text-lg text-slate-600">Ideas y guías sobre control horario, gestión de equipos, facturación y reclutamiento.</p>
         {/* El buscador lee los filtros de la URL: va dentro de Suspense para no bloquear el prerenderizado. */}
         <Suspense fallback={<BlogBrowserFallback />}>
-          <BlogBrowser posts={cards} />
+          <BlogBrowser posts={cards} categories={CATEGORIES} />
         </Suspense>
       </main>
       <footer className="border-t border-slate-200 py-6 text-center text-sm text-slate-500">

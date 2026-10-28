@@ -18,16 +18,20 @@ Control horario de empleados con Next.js 16 y [falcondatabase](https://falcondat
 
 ## Funcionalidades
 
-- **Landing** (`/`) en español e inglés, con la guía de la extensión de Chrome.
-- **Login** con usuarios de falcondatabase y sesión en una cookie httpOnly.
-- **Admin** (`/admin`): dashboard, empresas (autocierre), empleados (empresa, coste por hora o salario mensual,
-  geolocalización, objetivos), facturas de todos, mapa de fichajes, buzones de correo y sus propias horas.
-- **Empresa** (`/<empresa>`): fichaje con cronómetro, notas y reparto de horas en proyectos; calendario de asistencia
-  (ajuste de horas por día, ausencias: vacaciones, enfermedad, permisos); factura del mes que se acumula sola;
-  objetivos con evidencia (documento o YouTube); correo IMAP/SMTP; chat con compañeros, admins y agente IA (OpenAI);
-  proyectos y tareas; enlaces con credenciales cifradas; documentación en carpetas; perfil (foto y contraseña).
-- **Extensión de Chrome** (`extension/`, se descarga desde la landing): fichar sin abrir la app.
-- Modo claro/oscuro y menú lateral.
+- **Web pública** en español e inglés, con modo claro/oscuro: landing animada (sistema solar interactivo), ofertas de empleo
+  («Postula»), documentación (`/docs`), blog con categorías y buscador, contacto, política de cookies, sitemap y robots.
+- **Admin** (`/admin`): dashboard, empresas (autocierre y agente IA), empleados (empresa, coste por hora o salario,
+  geolocalización, objetivos, equipamiento), facturas de todos, reclutamiento, mapa de fichajes, buzones de correo,
+  mensajes de contacto y sus propias horas.
+- **Empresa** (`/<empresa>`):
+  - Fichaje con cronómetro, notas, autocierre y reparto de horas en proyectos y tareas.
+  - Calendario de asistencia: ajuste de horas por día y ausencias (vacaciones, enfermedad, permisos).
+  - Factura del mes que se acumula sola, con conceptos extra y 3 diseños; informe CSV.
+  - Objetivos con evidencia (documento o YouTube) y equipamiento asignado.
+  - Comunicación: chat (con agente IA de OpenAI), correo interno y correo externo IMAP/SMTP.
+  - Enlaces con credenciales cifradas y documentación en carpetas (arrastrar y soltar).
+  - Reclutamiento: ofertas, preguntas de la empresa + 10 de la IA, evaluación y escalafón, seguimiento del candidato.
+- **Extensión de Chrome** (`extension/`, se descarga desde la landing): fichar y chatear sin abrir la app.
 
 ## Puesta en marcha
 
