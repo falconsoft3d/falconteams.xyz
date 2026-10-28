@@ -1228,6 +1228,18 @@ export async function setCompanyActive(_: FormState, fd: FormData): Promise<Form
   });
 }
 
+export async function deleteCompany(_: FormState, fd: FormData): Promise<FormState> {
+  return asAdmin(async () => {
+    const id = idField(fd, "id");
+    const company = id ? await data.getCompanyById(id) : null;
+    if (!company) throw new Error("Empresa no válida.");
+    if (field(fd, "confirm") !== company.slug) {
+      throw new Error(`Escribe «${company.slug}» para confirmar.`);
+    }
+    await data.deleteCompany(company.id);
+  });
+}
+
 export async function setAutoClose(_: FormState, fd: FormData): Promise<FormState> {
   return asAdmin(async () => {
     const id = idField(fd, "id");

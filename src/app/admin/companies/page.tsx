@@ -2,8 +2,8 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { ActionForm } from "@/components/action-form";
 import { Loading } from "@/components/loading";
-import { btnPrimary, btnSecondary, btnSmall, card, input, label, pageTitle } from "@/components/ui";
-import { createCompany, renameCompany, setAutoClose, setCompanyActive } from "@/lib/actions";
+import { btnDanger, btnPrimary, btnSecondary, btnSmall, card, input, label, pageTitle } from "@/components/ui";
+import { createCompany, deleteCompany, renameCompany, setAutoClose, setCompanyActive } from "@/lib/actions";
 import { AiSettingsForm } from "@/components/ai-settings-form";
 import { listCompanyAi } from "@/lib/chat";
 import { listCompanies, listEmployees } from "@/lib/data";
@@ -106,6 +106,25 @@ async function CompanyList() {
             <div className="mt-3">
               <AiSettingsForm company={c} ai={aiByCompany.get(c.id) ?? null} />
             </div>
+          </details>
+          <details className="mt-3 rounded-xl border border-red-100 px-3 py-2.5">
+            <summary className="cursor-pointer text-sm font-medium text-red-700">Eliminar empresa</summary>
+            <p className="mt-2 text-sm text-slate-600">
+              Se borran para siempre sus fichajes, proyectos, documentos, enlaces, chat, correo interno, ofertas y equipos.
+              Antes hay que mover sus empleados a otra empresa.
+            </p>
+            <ActionForm action={deleteCompany} className="mt-3 flex flex-wrap gap-2">
+              <input type="hidden" name="id" value={c.id} />
+              <input
+                name="confirm"
+                required
+                autoComplete="off"
+                placeholder={c.slug}
+                aria-label={`Escribe ${c.slug} para confirmar`}
+                className={`${input} min-w-32 flex-1 py-1.5!`}
+              />
+              <button className={`${btnDanger} ${btnSmall}`}>Eliminar definitivamente</button>
+            </ActionForm>
           </details>
         </article>
       ))}

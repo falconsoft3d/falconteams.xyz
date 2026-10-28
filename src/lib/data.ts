@@ -105,6 +105,59 @@ export function updateCompany(
   return db.update("companies", id, values);
 }
 
+/** Tablas con datos propios de cada empresa (sin claves foráneas: se borran a mano). */
+const COMPANY_TABLES = [
+  "time_allocations",
+  "time_entries",
+  "tasks",
+  "projects",
+  "doc_files",
+  "doc_folders",
+  "company_links",
+  "company_ai",
+  "chat_messages",
+  "internal_mails",
+  "job_applications",
+  "job_offers",
+  "recruit_questions",
+  "equipment",
+];
+
+async function removeWhere(table: string, filters: Record<string, string | number>) {
+  const rows = await db.queryAll<{ id: number }>(table, { filters, select: ["id"] });
+  for (let i = 0; i < rows.length; i += 500) {
+    await db.remove(table, rows.slice(i, i + 500).map((r) => r.id));
+  }
+  return rows.map((r) => r.id);
+}
+
+async function removeWhereIn(table: string, column: string, ids: number[]) {
+  for (let i = 0; i < ids.length; i += 200) {
+    await removeWhere(table, { [column]: `in.(${ids.slice(i, i + 200).join(",")})` });
+  }
+}
+
+/**
+ * Elimina la empresa y todos sus datos. Se niega si aún tiene empleados:
+ * hay que moverlos a otra empresa antes, para no dejar cuentas huérfanas.
+ */
+export async function deleteCompany(id: number) {
+  const staff = await db.query("profiles", { filters: { company_id: id }, select: ["id"], limit: 1 });
+  if (staff.count) {
+    throw new Error(`La empresa tiene ${staff.count} empleado(s). Muévelos a otra empresa antes de eliminarla.`);
+  }
+  // Primero las tablas hijas que no llevan company_id.
+  const [equipmentIds, mailIds] = await Promise.all([
+    db.queryAll<{ id: number }>("equipment", { filters: { company_id: id }, select: ["id"] }),
+    db.queryAll<{ id: number }>("internal_mails", { filters: { company_id: id }, select: ["id"] }),
+  ]);
+  await removeWhereIn("equipment_images", "equipment_id", equipmentIds.map((e) => e.id));
+  await removeWhereIn("internal_mailboxes", "mail_id", mailIds.map((m) => m.id));
+  for (const table of COMPANY_TABLES) await removeWhere(table, { company_id: id });
+  // La empresa va al final: si algo falla a medias, sigue listada y se puede reintentar.
+  await db.remove("companies", [id]);
+}
+
 // ---------- Perfiles / empleados ----------
 
 export function getProfileByUserId(userId: number) {
